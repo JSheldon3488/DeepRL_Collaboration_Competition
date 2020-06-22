@@ -51,7 +51,7 @@ Each racket is an agent and the goal is to keep the ball in play for as long as 
         cd python folder in this repo
         pip install .
         ```
-    * **Note:** If installing the dependencies fails I included [this file]() with all the project packages listed and the version I used.      
+    * **Note:** If installing the dependencies fails I included [this file](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/dependencies.txt) with all the project packages listed and the version I used.      
 <!--
 #TODO: Link to Dependencies File
 -->
@@ -62,7 +62,7 @@ Each racket is an agent and the goal is to keep the ball in play for as long as 
 #TODO: Link to Report
 -->
 Follow along in `Tennis.ipynb` to learn more about the environment, train/test an agent, and view the results of a trained agent.
-If you just want to see a summary of the project check out [report.md]().
+If you just want to see a summary of the project check out [report.md](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/Report.md).
 
 -----------
 
