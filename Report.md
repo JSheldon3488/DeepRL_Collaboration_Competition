@@ -64,7 +64,7 @@ The agent solves the environment in approximately ? episodes.
 #TODO: Add graph of results
 -->
 <p align="center">
-<img src="images/DDPG_Agent_Multiple.png">
+<img src="https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/images/MADDPG_Algorithm.png">
 </p>
 
 <!--
