@@ -67,3 +67,10 @@ If you just want to see a summary of the project check out [report.md](https://g
 -----------
 
 ### File Descriptions
+  * [Tennis_Windows_x86_64 directory](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/tree/master/Tennis_Windows_x86_64) This is a download of the Unity environment for 64-bit Windows System.
+  * [python directory](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/tree/master/python) This is the install and setup directions from Udacity for this project.
+  * [REAADME file](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/README.md) The README file you are currently reading.
+  * [Report file](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/Report.md) This file contains an explanation of the project, the results of the project, and future ideas for the project.
+  * [Soccor Notebook](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/Soccer.ipynb) This notebook contains the initial setup for a more complex unity environment than the Tennis environment.
+  * [Tennis Notebook](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/Tennis.ipynb) This notebook contains the walkthrough for solving the Unity Tennis environment.
+  * [dependencies file](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/dependencies.txt) This file contains a list of all the packages and their version numbers used in this project.
