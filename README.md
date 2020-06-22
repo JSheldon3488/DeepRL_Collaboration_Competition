@@ -46,17 +46,21 @@ Each racket is an agent and the goal is to keep the ball in play for as long as 
 
 5. Download all the dependencies.
     * [OpenAI gym.](https://github.com/openai/gym) Install instructions in the repository README.
-    * [Udacity Deep RL Repo.](https://github.com/udacity/deep-reinforcement-learning#dependencies) Install instructions in dependencies section of README. Details for just setting up this repo below.
+    * Install all the dependencies in the python folder
         ```bash
         cd python folder in this repo
         pip install .
         ```
     * **Note:** If installing the dependencies fails I included [this file]() with all the project packages listed and the version I used.      
-
+<!--
+#TODO: Link to Dependencies File
+-->
 -----------
 
 ### Instructions
-
+<!--
+#TODO: Link to Report
+-->
 Follow along in `Tennis.ipynb` to learn more about the environment, train/test an agent, and view the results of a trained agent.
 If you just want to see a summary of the project check out [report.md]().
 
