@@ -30,7 +30,9 @@ Below is details about the environment and a video of untrained agents acting in
 ## Training the Agent: MADDPG (Multi-Agent Actor-Critic)
 [Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments](https://papers.nips.cc/paper/7217-multi-agent-actor-critic-for-mixed-cooperative-competitive-environments.pdf) 
 is very similar to other actor-critic algorithms that are used to solve problems with continuous actions spaces. 
-The big difference is that it is extended actor-critic methods to take advantage of multiple agents.
+The big difference is that it extends the actor-critic method to take advantage of multiple agents.
+It has decentralized actors just like in DDPG that selects an action based on an observation,
+but now you use a centralized critic that takes in additional information about the state and actions of the other agents and outputs a Q-Value.
 More details can be read in the paper linked in above. The outline of the algorithm is below.
 <!--
 #TODO: Add better explanation of MADDPG
@@ -64,7 +66,7 @@ The agent solves the environment in approximately ? episodes.
 #TODO: Add graph of results
 -->
 <p align="center">
-<img src="https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/images/MADDPG_Algorithm.png">
+<img src= >
 </p>
 
 <!--
