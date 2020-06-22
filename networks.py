@@ -14,25 +14,25 @@ def hidden_init(layer):
 class Actor(nn.Module):
     " Actor (Policy) network for action selection "
 
-    def __init__(self, state_size, action_size, seed, fc1_size=256, fc2_size=128, leak=0.01):
+    def __init__(self, input_size, action_size, seed, fc1_size=256, fc2_size=128, leak=0.01):
         """ Initialize parameters and build actor network
-        :param state_size: Dimension of the input state
-        :param action_size: Dimension of the output state
+        :param input_size: Dimension of the input
+        :param action_size: Dimension of the output
         :param seed: random seed
         """
         super(Actor,self).__init__()
         self.seed = torch.manual_seed(seed)
         self.leak = leak
-        self.fc1 = nn.Linear(state_size, fc1_size)
+        self.fc1 = nn.Linear(input_size, fc1_size)
         self.fc2 = nn.Linear(fc1_size,fc2_size)
         self.fc3 = nn.Linear(fc2_size, action_size)
-        self.bn_input = nn.BatchNorm1d(state_size)
+        self.bn_input = nn.BatchNorm1d(input_size)
         self.bn1 = nn.BatchNorm1d(fc1_size)
         self.reset_parameters()
 
-    def forward(self, state):
+    def forward(self, states):
         """ policy network that maps states -> actions """
-        x = self.bn_input(state)
+        x = self.bn_input(states)
         x = F.leaky_relu(self.bn1(self.fc1(x)), negative_slope=self.leak)
         x = F.leaky_relu(self.fc2(x), negative_slope=self.leak)
         return torch.tanh(self.fc3(x))
@@ -47,27 +47,27 @@ class Actor(nn.Module):
 class Critic(nn.Module):
     " Critic (Value) network for evaluating actions "
 
-    def __init__(self, state_size, action_size, seed, fc1_size=256, fc2_size=128, leak=0.01):
+    def __init__(self, input_size, action_size, seed, fc1_size=256, fc2_size=128, leak=0.01):
         """ Initialize the parameters and set up the network
-        :param state_size: Dimension of input state
+        :param input_size: Dimension of input state
         :param action_size: Dimension of output state
         :param seed: random seed
         """
         super(Critic, self).__init__()
         self.seed = torch.manual_seed(seed)
         self.leak = leak
-        self.fc1 = nn.Linear(state_size, fc1_size)
+        self.fc1 = nn.Linear(input_size, fc1_size)
         self.fc2 = nn.Linear(fc1_size+action_size, fc2_size)
         self.fc3 = nn.Linear(fc2_size, 1)
-        self.bn_input = nn.BatchNorm1d(state_size)
+        self.bn_input = nn.BatchNorm1d(input_size)
         self.bn1 = nn.BatchNorm1d(fc1_size)
         self.reset_parameters()
 
-    def forward(self, state, action):
+    def forward(self, states, actions):
         """ Critic Network that maps (state,action) pairs -> Q-Values """
-        x = self.bn_input(state)
+        x = self.bn_input(states)
         x = F.leaky_relu(self.bn1(self.fc1(x)), negative_slope=self.leak)
-        x_a = torch.cat((x,action), dim=1)
+        x_a = torch.cat((x,actions), dim=1)
         x_a = F.leaky_relu(self.fc2(x_a), negative_slope=self.leak)
         return self.fc3(x_a)
 
