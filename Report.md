@@ -40,7 +40,7 @@ More details can be read in the paper linked in above. The outline of the algori
 #TODO: Add image of algorithm
 -->
 <p align="center">
-    <img src = >
+    <img src = "images\MADDPG_Algorithm.png">
 </p>
 
 <!--
