@@ -8,12 +8,12 @@ import os
 import random
 import numpy as np
 from collections import deque
-PATH = os.path.abspath(os.getcwd()) + '\\Udacity_DeepRL_Collaboration_Competition'
+PATH = os.path.abspath(os.getcwd())
 
 class MADDPG():
     """ Multi Agent Deep Deterministic Policy Gradients Agent used to interaction with and learn from an environment """
 
-    def __init__(self, state_size: int, action_size: int, num_agents: int, epsilon, random_seed: int):
+    def __init__(self, state_size: int, action_size: int, num_agents: int, epsilon: float, random_seed: int):
         """ Initialize a MADDPG Agent Object
         :param state_size: dimension of state (input)
         :param action_size: dimension of action (output)
@@ -45,7 +45,7 @@ class MADDPG():
 
         # Setup up all Agents
         # TODO: Does each agent need its own epsilon?
-        self.agents = [Individual_DDPG(state_size, action_size, num_agents, agent_num, epsilon, random_seed) for agent_num in range(num_agents)]
+        self.agents = [Individual_DDPG(state_size, action_size, num_agents, agent_num, epsilon, self.seed) for agent_num in range(num_agents)]
 
         # Noise Setup
         self.noise = OUNoise(self.action_size, random_seed)
@@ -96,7 +96,7 @@ class MADDPG():
             scores_deque.append(np.max(episode_scores))
             avg_scores.append(np.mean(scores_deque))
             if episode_num % print_every == 0:
-                print(f'Episode: {episode_num} \tAverage Score: {round(np.mean(scores_deque), 2)}')
+                print(f'Episode: {episode_num} \tAverage Score: {round(np.mean(scores_deque[-10]), 3)}')
                 for agent in self.agents:
                     torch.save(agent.actor_local.state_dict(), f'{PATH}\checkpoints\{agent.__str__()}_Agent{agent.agent_num}_Actor.pth')
                     torch.save(agent.critic_local.state_dict(), f'{PATH}\checkpoints\{agent.__str__()}_Agent{agent.agent_num}_Critic.pth')
@@ -152,16 +152,16 @@ class MADDPG():
         """
         all_actions = []
         for agent in self.agents:
-            agent_state = torch.from_numpy(states[agent.agent_num,:]).float().to(self.device)
+            agent_state = torch.from_numpy(np.reshape(states[agent.agent_num,:], newshape=(1,-1))).float().to(self.device)
             agent.actor_local.eval() # Sets to eval mode (no gradients)
             with torch.no_grad():
                 agent_actions = agent.actor_local(agent_state).cpu().data.numpy()
             agent.actor_local.train() # Sets to train mode (gradients back on)
             if add_noise and epsilon > np.random.random():
-                agent_actions += agent.noise.sample()
+                agent_actions += np.random.randn(1,self.action_size)
             agent_actions = np.clip(agent_actions, -1,1)
             all_actions.append(agent_actions)
-        return np.asarray(all_actions)
+        return np.concatenate(all_actions, axis=0)
 
     def reset_noise(self):
         """ resets to noise parameters for all agents """
@@ -179,10 +179,10 @@ class MADDPG():
         next_actions = []
         for agent in self.agents:
             next_actions.append((agent.actor_target(full_next_states[:, agent.agent_num*agent.state_size: agent.agent_num*agent.state_size+agent.state_size])))
-        next_actions = np.asarray(next_actions).reshape(-1)
+        next_actions = torch.stack(next_actions).float().to(self.device).view(-1, self.action_size*self.num_agents)
         # Calculate the q_targets
         next_q_targets = update_agent.critic_target(full_next_states, next_actions)
-        q_targets = rewards[:, update_agent.agent_num] + (self.gamma*next_q_targets*(1-dones[:, update_agent.agent_num]))
+        q_targets = rewards[:, update_agent.agent_num].view(-1,1) + (self.gamma*next_q_targets*(1-dones[:, update_agent.agent_num].view(-1,1)))
 
         # Compute critic loss
         q_expected = update_agent.critic_local(full_states,full_actions)
@@ -209,7 +209,7 @@ class MADDPG():
 class Individual_DDPG():
     """ Deep Deterministic Policy Gradients Agent used to interaction with and learn from an environment """
 
-    def __init__(self, state_size: int, action_size: int, num_agents: int, agent_num: int, epsilon, random_seed: int):
+    def __init__(self, state_size: int, action_size: int, num_agents: int, agent_num: int, epsilon, random_seed):
         """ Initialize a DDPG Agent Object
         :param state_size: dimension of state (input)
         :param action_size: dimension of action (output)
@@ -220,7 +220,7 @@ class Individual_DDPG():
         self.state_size = state_size
         self.action_size = action_size
         self.num_agents = num_agents
-        self.seed = random.seed(random_seed)
+        self.seed = random_seed
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.t_step = 0
         self.agent_num = agent_num

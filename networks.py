@@ -21,19 +21,19 @@ class Actor(nn.Module):
         :param seed: random seed
         """
         super(Actor,self).__init__()
-        self.seed = torch.manual_seed(seed)
+        #self.seed = torch.manual_seed(seed)
         self.leak = leak
         self.fc1 = nn.Linear(input_size, fc1_size)
         self.fc2 = nn.Linear(fc1_size,fc2_size)
         self.fc3 = nn.Linear(fc2_size, action_size)
-        self.bn_input = nn.BatchNorm1d(input_size)
-        self.bn1 = nn.BatchNorm1d(fc1_size)
+        #self.bn_input = nn.BatchNorm1d(input_size)
+        #self.bn1 = nn.BatchNorm1d(fc1_size)
         self.reset_parameters()
 
     def forward(self, states):
         """ policy network that maps states -> actions """
-        x = self.bn_input(states)
-        x = F.leaky_relu(self.bn1(self.fc1(x)), negative_slope=self.leak)
+        #x = self.bn_input(states)
+        x = F.leaky_relu(self.fc1(states), negative_slope=self.leak)
         x = F.leaky_relu(self.fc2(x), negative_slope=self.leak)
         return torch.tanh(self.fc3(x))
 
@@ -54,19 +54,19 @@ class Critic(nn.Module):
         :param seed: random seed
         """
         super(Critic, self).__init__()
-        self.seed = torch.manual_seed(seed)
+        #self.seed = torch.manual_seed(seed)
         self.leak = leak
         self.fc1 = nn.Linear(input_size, fc1_size)
         self.fc2 = nn.Linear(fc1_size+action_size, fc2_size)
         self.fc3 = nn.Linear(fc2_size, 1)
-        self.bn_input = nn.BatchNorm1d(input_size)
-        self.bn1 = nn.BatchNorm1d(fc1_size)
+        #self.bn_input = nn.BatchNorm1d(input_size)
+        #self.bn1 = nn.BatchNorm1d(fc1_size)
         self.reset_parameters()
 
     def forward(self, states, actions):
         """ Critic Network that maps (states,actions) pairs -> Q-Values """
-        x = self.bn_input(states)
-        x = F.leaky_relu(self.bn1(self.fc1(x)), negative_slope=self.leak)
+        #x = self.bn_input(states)
+        x = F.leaky_relu(self.fc1(states), negative_slope=self.leak)
         x_a = torch.cat((x,actions), dim=1)
         x_a = F.leaky_relu(self.fc2(x_a), negative_slope=self.leak)
         return self.fc3(x_a)
