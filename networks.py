@@ -49,8 +49,8 @@ class Critic(nn.Module):
 
     def __init__(self, input_size, action_size, seed, fc1_size=256, fc2_size=128, leak=0.01):
         """ Initialize the parameters and set up the network
-        :param input_size: Dimension of input state
-        :param action_size: Dimension of output state
+        :param input_size: Dimension of input state for all agents (all agents observations combined)
+        :param action_size: Dimension of actions for all agents (all agents actions combined)
         :param seed: random seed
         """
         super(Critic, self).__init__()
@@ -64,7 +64,7 @@ class Critic(nn.Module):
         self.reset_parameters()
 
     def forward(self, states, actions):
-        """ Critic Network that maps (state,action) pairs -> Q-Values """
+        """ Critic Network that maps (states,actions) pairs -> Q-Values """
         x = self.bn_input(states)
         x = F.leaky_relu(self.bn1(self.fc1(x)), negative_slope=self.leak)
         x_a = torch.cat((x,actions), dim=1)
