@@ -20,7 +20,7 @@ class ReplayBuffer:
         self.buffer_size = buffer_size
         self.memory = deque(maxlen = self.buffer_size)
         self.experience = namedtuple("Experience", field_names=["states", "actions", "rewards", "next_states", "dones"])
-
+        
     def add(self, states, actions, rewards, next_states, dones):
         """ Add an experience to memory """
         self.memory.append(self.experience(states, actions, rewards, next_states, dones))
@@ -35,7 +35,7 @@ class ReplayBuffer:
         next_states = torch.from_numpy(np.vstack([e.next_states for e in experiences if e is not None])).float().to(device)
         dones = torch.from_numpy(np.vstack([e.dones for e in experiences if e is not None]).astype(np.uint8)).float().to(device)
 
-        return (states, actions, rewards, next_states, dones)
+        return states, actions, rewards, next_states, dones
 
     def __len__(self):
         " Return the current size of internal memory "
@@ -51,6 +51,7 @@ class OUNoise:
         self.sigma = sigma
         self.seed = random.seed(seed)
         self.state = None
+        self.size = action_size
         self.reset()
 
     def reset(self):
@@ -60,7 +61,7 @@ class OUNoise:
     def sample(self):
         """ Update internal state and return it as a noise sample """
         x = self.state
-        dx = self.theta*(self.mu - x) + self.sigma*np.array([np.random.randn() for i in range(len(x))])
+        dx = self.theta*(self.mu - x) + self.sigma * np.random.randn(self.size)
         self.state = x + dx
         return self.state
 
