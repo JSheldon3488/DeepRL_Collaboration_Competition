@@ -33,12 +33,12 @@ class MADDPG():
         # Hyperparameters
         self.buffer_size = 100000
         self.batch_size = 256
-        self.update_every = 1
+        self.update_every = 5
         self.num_updates = 5
         self.gamma = 0.95
         self.epsilon = epsilon
-        self.epsilon_decay = 0.995 # around 1100 episodes exploring will hit min
-        self.epsilon_min = 0.005
+        self.epsilon_decay = 0.004 # 1500 episodes will stop adding additional noise
+        self.epsilon_min = 0
 
         # Setup up all Agents
         self.agents = [DDPG(self.state_size, self.action_size, self.num_agents, self.seed) for _ in range(self.num_agents)]
@@ -49,7 +49,6 @@ class MADDPG():
     def __str__(self):
         return "MADDPG_Agent"
 
-    # TODO: Rewrite train
     def train(self, env, brain_name, num_episodes=2500, print_every=10):
         """ Interacts with and learns from a given Unity Environment
         :param env: Unity Environment the agents is trying to learn
@@ -88,7 +87,6 @@ class MADDPG():
                 print(f'Dones: {dones}')
                 print("----------------------------------------------------") '''
 
-                # TODO: Rewrite Step function and make sure episodes scores are working correctly
                 self.step(states, actions, rewards, next_states, dones)
                 episode_scores += rewards
                 states = next_states
@@ -96,7 +94,7 @@ class MADDPG():
                     break
 
             # -------- Episode Finished ---------#
-            self.epsilon *= self.epsilon_decay
+            self.epsilon -= self.epsilon_decay
             self.epsilon = max(self.epsilon, self.epsilon_min)
             scores.append(np.max(episode_scores))
             scores_deque.append(np.max(episode_scores))
@@ -153,12 +151,9 @@ class MADDPG():
         actions = [agent.act(local_obs, epsilon) for agent, local_obs in zip(self.agents,states)]
         return np.asarray(actions)
 
-    # TODO: Target_act outputs need to be tested
     def target_act(self, obs_full):
         """ Returns actions for each agent given states as per current policy. Policy comes from the actor network.
         :param states: array of states from the environment for each agent
-        :param epsilon: probability of exploration
-        :param add_noise: bool on whether or not to potentially have exploration for action
         :return: clipped actions for all agents from the local networks
         """
         actions = [agent.target_act(local_obs) for agent, local_obs in zip(self.agents,obs_full)]
@@ -235,8 +230,8 @@ class MADDPG():
 
         # TODO: Make sure soft updates correct
         #---------------- Update Target Networks ---------------- #
-        for agent in self.self.agents:
-            agent.soft_update(agent.actor_local, agent.actor_target, self.tau)
+        for agent in self.agents:
+            agent.soft_update(agent.actor_local, agent.actor_target, agent.tau)
 
 
 class DDPG():
@@ -296,8 +291,8 @@ class DDPG():
             actions = self.actor_local(state).cpu().data.numpy()
         self.actor_local.train()
         # print(f'Action before noise: Shape: {actions.shape}, Value: {actions}') PASSED
-        if add_noise and epsilon > np.random.random():
-            actions += self.noise.sample()
+        if add_noise:
+            actions += self.noise.sample()*epsilon
         # print(f'Action after noise: Shape: {actions.shape}, Value: {actions}') PASSED
         return np.clip(actions, -1,1)
 
