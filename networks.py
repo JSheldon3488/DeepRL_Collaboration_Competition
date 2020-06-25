@@ -14,7 +14,7 @@ def hidden_init(layer):
 class Actor(nn.Module):
     """ Actor (Policy) network for action selection """
     # TODO: Make sure action input state_size is correctly handled (should it be 24 or 48)
-    def __init__(self, input_size, action_size, seed, fc1_size=256, fc2_size=128, leak=0.01):
+    def __init__(self, input_size, action_size, seed, fc1_size=512, fc2_size=256, leak=0.01):
         """ Initialize parameters and build actor network
         :param input_size: Dimension of the input
         :param action_size: Dimension of the output
@@ -54,7 +54,7 @@ class Actor(nn.Module):
 class Critic(nn.Module):
     " Critic (Value) network for evaluating actions "
 
-    def __init__(self, input_size, action_size, seed, fc1_size=256, fc2_size=128, leak=0.01):
+    def __init__(self, input_size, action_size, seed, fc1_size=512, fc2_size=256, leak=0.01):
         """ Initialize the parameters and set up the network
         :param input_size: Dimension of input state for all agents (all agents observations combined)
         :param action_size: Dimension of actions for all agents (all agents actions combined)

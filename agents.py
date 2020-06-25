@@ -33,12 +33,12 @@ class MADDPG():
         # Hyperparameters
         self.buffer_size = 100000
         self.batch_size = 256
-        self.update_every = 5
-        self.num_updates = 5
-        self.gamma = 0.95
-        self.epsilon = epsilon
-        self.epsilon_decay = 0.004 # 1500 episodes will stop adding additional noise
-        self.epsilon_min = 0
+        self.update_every = 1
+        self.num_updates = 1
+        self.gamma = 0.99
+        self.epsilon = 1
+        self.epsilon_decay = 0 # Turned off noise scaling
+        self.epsilon_min = 1
 
         # Setup up all Agents
         self.agents = [DDPG(self.state_size, self.action_size, self.num_agents, self.seed) for _ in range(self.num_agents)]
@@ -99,8 +99,9 @@ class MADDPG():
             scores.append(np.max(episode_scores))
             scores_deque.append(np.max(episode_scores))
             avg_scores.append(np.mean(scores_deque))
+            max_score_last_100 = max(scores_deque)
             if episode_num % print_every == 0:
-                print(f'Episode: {episode_num} \tAverage Score: {round(np.mean(scores_deque), 3)}')
+                print(f'Episode: {episode_num} \tAverage Score: {round(np.mean(scores_deque), 3)}, Max Last 100: {round(max_score_last_100,3)}')
                 for i,agent in enumerate(self.agents):
                     torch.save(agent.actor_local.state_dict(), f'{PATH}\checkpoints\{agent.__str__()}_{i}_Actor.pth')
                     torch.save(agent.critic_local.state_dict(), f'{PATH}\checkpoints\{agent.__str__()}_{i}_Critic.pth')
@@ -250,9 +251,9 @@ class DDPG():
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
         # Hyperparameters
-        self.tau = 0.001
-        self.lr_actor = 0.0001
-        self.lr_critic = 0.0001
+        self.tau = 0.05
+        self.lr_actor = 0.001
+        self.lr_critic = 0.001
 
         # Setup Networks (Actor: State -> Action, Critic: (States for all agents, Actions for all agents) -> Value)
         self.actor_local = Actor(self.state_size, self.action_size,  self.seed).to(self.device)
