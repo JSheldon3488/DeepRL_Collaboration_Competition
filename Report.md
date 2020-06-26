@@ -31,33 +31,52 @@ The big difference is that it extends the actor-critic method to take advantage 
 It has decentralized actors just like in DDPG that selects an action based on an observation,
 but now you use a centralized critic that takes in additional information about the state and actions of the other agents and outputs a Q-Value.
 More details can be read in the paper linked in above. The outline of the algorithm is below.
-<!--
-#TODO: Add better explanation of MADDPG
--->
 
-<!--
-#TODO: Add image of algorithm
--->
 <p align="center">
     <img src = "images\MADDPG_Algorithm.png">
 </p>
 
-<!--
-#TODO: Fill in network information
--->
-**Changes to Algorithm:**
-
-**Actor Network Architecture:**
-
-**Critic Network Architecture:**
-
-**Hyperparameters:** 
+## Results:
+I could not get this algoirhtm to work in practice. No matter which combination of hyperparameters, model architecture, or how long I ran the simulation,
+I could not get this algorithm to work. I pivoted to trying to solve the environment with two single DDPG Agents. The results are below.
 
 -----------
 
+## Training the Agents Attempt 2: Multiple DDPG Agents
+[Deep Deterministic Policy Gradients](https://arxiv.org/abs/1509.02971) is an actor-critic algorithm that is used to solve problems with
+continuous actions spaces. More details can be read in the paper linked in the last sentence. The outline of the algorithm is below.
+
+<p align="center">
+    <img src = "https://github.com/JSheldon3488/DeepRL_Continuous_Control/blob/master/images/DDPG_Algorithm.png">
+</p>
+
+**Actor Network Architecture (each agent):**
+  - Layer 1: Input_State (24) -> Fully_Connected (24, 512) -> Relu(512)
+  - Layer 2: Fully_Connected (512, 256) -> Relu(256)
+  - Layer 3: Fully_Connected (256, 2) -> tanh (2)
+  - Output: 2 actions between (-1,1) 
+
+**Critic Network Architecture (each agent):**
+  - Layer 1: Input_State (24) -> Fully_Connected (24, 512) -> Relu(512)
+  - Layer 2: Concat (Layer_1_Output + action_size 2) -> Fully_Connected (514,256) -> Relu(256)
+  - Layer 3: Fully_Connected (256, Q_value 1)
+   - Output: 1 Q_Value
+
+**Hyperparameters (each agent):** 
+ - Replay Buffer Size: 100,000
+ - Batch Size: 256
+ - Update Every: 1 (how often in timesteps to update networks)
+ - Number of Updates: 1 (how many times to update per update_every)
+ - Discount Rate Gamma: 0.99 (Q-Value Calculation)
+ - Network Soft Update Rate Tau: 0.01
+ - Learning Rate Actor: 0.0001
+ - Learning Rate Critic: 0.001
+ - Weight Decay: 0
+ - Exploration Rate Epsilon: (start=1, decay=0.998, min=0)
+
 ## Results:
 Below is a graph of the training results and a short video of the trained agents interacting in the environment. 
-The agent solves the environment in approximately ? episodes.
+The agent solves the environment in approximately 900 episodes.
 
 <p align="center">
 <img src= "https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/images/MADDPG_results.png" >
@@ -70,7 +89,8 @@ The agent solves the environment in approximately ? episodes.
 ----------
 
 ## Future Ideas
- - Tune the hyperparameters to solve the environment faster.
+ - Train the agent longer to see max score and if agent is stable.
+ - Figure out what adjustments need to be made to make MADDPG work.
  - Implement Prioritized Experience Replay
  - Setup a way to automatically run experiements and compare results between different architectures.
  
