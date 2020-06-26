@@ -7,11 +7,8 @@ Starter code and project details can be found [here](https://github.com/udacity/
 The goal of this project is to train an agent to solve the [Unity Tennis](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#tennis) environment.
 Below is details about the environment and a video of untrained agents acting in the environment.
 
-<!--
-#TODO: Add gif of untrained agent
--->
 <p align="center">
-    <img src = "images/Untrained_Agents.gif">
+    <img src = "https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/images/untrained_tennis.gif">
 </p>
 
 **Reward:** +0.1 for individual agent if it hits the ball over the net. -0.01 If an agent lets a ball hit the ground or hits the ball out of bounds.
@@ -73,7 +70,7 @@ The agent solves the environment in approximately ? episodes.
 #TODO: Add gif of trained agent
 -->
 <p align="center">
-    <img src = "images/Trained_Agents.gif">
+    <img src = "https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/images/trained_tennis.gif">
 </p>
 
 ----------
