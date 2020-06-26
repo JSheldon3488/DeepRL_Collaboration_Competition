@@ -63,6 +63,12 @@ If you just want to see a summary of the project check out [report.md](https://g
 -----------
 
 ### File Descriptions
+  * [checkpoints directory](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/tree/master/checkpoints) Directory of saved model parameters.
+  * [images directory](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/tree/master/images) Directory of saved graphs and gifs.
+  * [scores directory](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/tree/master/scores). Directory of saved scores from training.
+  * [agents.py](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/agents.py) Python file that contains the MADDPG Class and DDPG Class
+  * [networks.py](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/networks.py) Python file that contains the actor and critic networks.
+  * [utils.py](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/utils.py) Python file that contains the Replay Buffer Class and OUNoise Class.
   * [Tennis_Windows_x86_64 directory](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/tree/master/Tennis_Windows_x86_64) This is a download of the Unity environment for 64-bit Windows System.
   * [python directory](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/tree/master/python) This is the install and setup directory from Udacity for this project.
   * [README file](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/README.md) The README file you are currently reading.
