@@ -45,13 +45,14 @@ Each racket is an agent and the goal is to keep the ball in play for as long as 
 4. Create and activate a Pyton environment for this project. (I used PyCharm `venv`)
 
 5. Download all the dependencies.
-    * [OpenAI gym.](https://github.com/openai/gym) Install instructions in the repository README.
     * Install all the dependencies in the python folder
         ```bash
-        cd python folder in this repo
+        cd python
         pip install .
         ```
-    * **Note:** If installing the dependencies fails I included [this file](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/dependencies.txt) with all the project packages listed and the version I used.      
+    * **Note:** If installing the dependencies fails I included [this file](https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/dependencies.txt) with all the project packages listed and the version I used. You can run `pip install -r requirements.txt` from the command line as long as you are in thie project home directory.
+    * To get a newer version of PyTorch go [here](https://pytorch.org/) and follow the directions on the homepage.
+    * I recommend pip installing the newer version of tensorflow because the version required by Udacity appears to have a security flaw (as reported by Github).
 
 -----------
 
