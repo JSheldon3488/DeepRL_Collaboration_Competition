@@ -59,16 +59,10 @@ More details can be read in the paper linked in above. The outline of the algori
 Below is a graph of the training results and a short video of the trained agents interacting in the environment. 
 The agent solves the environment in approximately ? episodes.
 
-<!--
-#TODO: Add graph of results
--->
 <p align="center">
-<img src= >
+<img src= "https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/images/MADDPG_results.png" >
 </p>
 
-<!--
-#TODO: Add gif of trained agent
--->
 <p align="center">
     <img src = "https://github.com/JSheldon3488/DeepRL_Collaboration_Competition/blob/master/images/trained_tennis.gif">
 </p>
